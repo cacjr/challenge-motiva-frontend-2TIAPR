@@ -159,7 +159,7 @@ Cada linha descreve o que a pessoa **de fato** commitou. O histórico do Git con
 | Erick Miguel | 564896 | _pendente: tarefa 1, 7º trecho em `trechos.js` (ver `TAREFAS.md`)_ |
 | Gustavo Duarte | 567066 | _pendente: tarefa 2, novo comando de voz em `interacoes.js` (ver `TAREFAS.md`)_ |
 | Leonardo Pereira | 567836 | _pendente: tarefa 3, 4º velocímetro em `resumoDashboard.js` (ver `TAREFAS.md`)_ |
-| Sarah Marangoni | 566764 | _pendente: tarefa 4, novo princípio em `comoFunciona.js` (ver `TAREFAS.md`)_ |
+| Sarah Marangoni | 566764 | Paleta centralizada em `src/utils/cores.js`, usada nos gráficos (`GraficoBarras`, `GraficoGauge`, `GraficoPizza`, `PainelGraficos`), e princípio Cuidar da Natureza ligado ao Elo em `comoFunciona.js` |
 
 ## Fontes
 

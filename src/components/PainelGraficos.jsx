@@ -2,6 +2,7 @@ import GraficoBarras from './GraficoBarras.jsx'
 import GraficoPizza from './GraficoPizza.jsx'
 import GraficoGauge from './GraficoGauge.jsx'
 import { coresPorLimite } from '../utils/formatar.js'
+import { cores } from '../utils/cores.js'
 
 // Recebe o resumo por prop. Quem importa src/data/resumoDashboard.js é o App.
 // completo = false (Início): barras de entrada, pizza e velocímetros.
@@ -13,8 +14,8 @@ export default function PainelGraficos({ resumo, completo = false }) {
   const coresMapa = coresPorLimite(
     mapaSilencio.valores,
     mapaSilencio.limiteMin,
-    '#1f2366',
-    '#c26a12',
+    cores.indigo,
+    cores.ambar,
   )
 
   return (
@@ -35,7 +36,7 @@ export default function PainelGraficos({ resumo, completo = false }) {
         titulo={ocorrenciasPorEntrada.titulo}
         labels={ocorrenciasPorEntrada.labels}
         valores={ocorrenciasPorEntrada.valores}
-        cor="#3f4bb8"
+        cor={cores.azul}
         leitura={completo ? ocorrenciasPorEntrada.leitura : undefined}
       />
       <GraficoPizza

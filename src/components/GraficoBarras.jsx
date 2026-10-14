@@ -1,6 +1,7 @@
 import { Bar } from 'react-chartjs-2'
 import { registrarCharts } from '../utils/charts.js'
 import { descreverSerie } from '../utils/formatar.js'
+import { cores } from '../utils/cores.js'
 
 registrarCharts()
 
@@ -11,7 +12,7 @@ export default function GraficoBarras({
   titulo,
   labels,
   valores,
-  cor = '#1f2366',
+  cor = cores.indigo,
   rotuloValor = 'Quantidade',
   leitura,
   largo = false,

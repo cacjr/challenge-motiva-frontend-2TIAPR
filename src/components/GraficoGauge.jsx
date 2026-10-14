@@ -1,5 +1,6 @@
 import { Doughnut } from 'react-chartjs-2'
 import { registrarCharts } from '../utils/charts.js'
+import { cores } from '../utils/cores.js'
 
 registrarCharts()
 
@@ -10,7 +11,7 @@ export default function GraficoGauge({
   valor,
   maximo,
   detalhe,
-  cor = '#1f2366',
+  cor = cores.indigo,
 }) {
   const resto = Math.max(maximo - valor, 0)
 

@@ -1,10 +1,11 @@
 import { Pie } from 'react-chartjs-2'
 import { registrarCharts } from '../utils/charts.js'
 import { descreverSerie } from '../utils/formatar.js'
+import { cores } from '../utils/cores.js'
 
 registrarCharts()
 
-const CORES = ['#1f2366', '#3f4bb8', '#c26a12', '#9aa1c9']
+const CORES = [cores.indigo, cores.azul, cores.ambar, cores.lavanda]
 
 // Pizza mostra parte de um todo (aqui, a rota de chegada das ocorrências).
 // CORES segue a paleta índigo e âmbar do index.css.

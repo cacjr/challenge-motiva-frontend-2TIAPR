@@ -87,4 +87,5 @@ export const principios = [
   { id: 'simplicidade', valor: 'Simplicidade', ligacao: 'Registrar falando, sem digitar. Se a voz não der, dois toques ou nenhum gesto.' },
   { id: 'servir', valor: 'Servir a Sociedade', ligacao: 'Onde a malha é mais isolada, o socorro chega mais cedo.' },
   { id: 'excelencia', valor: 'Excelência', ligacao: 'Uma métrica nova, auditável: hora do fato contra hora da central.' },
+  { id: 'natureza', valor: 'Cuidar da Natureza', ligacao: 'Atropelamento de fauna também vira registro com km exato: o dado mostra onde a rodovia precisa de passagem de fauna.' },
 ]
