@@ -28,6 +28,7 @@ export default function PainelGraficos({ resumo, completo = false }) {
           rotuloValor="Minutos de silêncio"
           leitura={mapaSilencio.leitura}
           largo
+          unidade=" min"
         />
       )}
       <GraficoBarras

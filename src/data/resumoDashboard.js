@@ -59,4 +59,12 @@ export const velocimetros = [
     detalhe: 'frentes de serviço ativas agora',
     cor: '#1f2366',
   },
+    {
+    id: 'voz',
+    titulo: 'Registros que começaram pela voz',
+    valor: 29,
+    maximo: 40,
+    detalhe: 'das 40 ocorrências do recorte',
+    cor: '#3f4bb8',
+  },
 ]

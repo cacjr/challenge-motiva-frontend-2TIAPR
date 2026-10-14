@@ -155,11 +155,11 @@ Cada linha descreve o que a pessoa **de fato** commitou. O histórico do Git con
 
 | Integrante | RM | Contribuição |
 |---|---|---|
-| Claudio Alves | 568565 | Base do projeto (React + Vite, componentes, telas, dados e gráficos), pesquisa sobre a Motiva, README, fluxo de dados centralizado no App, reposicionamento do Elo como agente de voz e acessibilidade |
-| Erick Miguel | 564896 | 7º trecho (Coxim, km 720–760) em `trechos.js` e links das fontes no README |
-| Gustavo Duarte | 567066 | Comando de voz sobre neblina no km 330 (`i-8`) e correção do alcance LoRa da `i-7` em `interacoes.js` |
-| Leonardo Pereira | 567836 | 4º velocímetro (registros por voz) em `resumoDashboard.js` e unidade "min" no Mapa do Silêncio para leitor de tela |
-| Sarah Marangoni | 566764 | Centralização das cores em `utils/cores.js` e novo princípio da Motiva ligado ao Elo em `comoFunciona.js` |
+| Claudio Alves | 568565 | Base do projeto (React + Vite, componentes, telas, dados e gráficos), pesquisa sobre a Motiva, README, fluxo de dados centralizado no App e reposicionamento do Elo como agente de voz |
+| Erick Miguel | 564896 | _pendente: tarefa 1, 7º trecho em `trechos.js` (ver `TAREFAS.md`)_ |
+| Gustavo Duarte | 567066 | _pendente: tarefa 2, novo comando de voz em `interacoes.js` (ver `TAREFAS.md`)_ |
+| Leonardo Pereira | 567836 | _pendente: tarefa 3, 4º velocímetro em `resumoDashboard.js` (ver `TAREFAS.md`)_ |
+| Sarah Marangoni | 566764 | _pendente: tarefa 4, novo princípio em `comoFunciona.js` (ver `TAREFAS.md`)_ |
 
 ## Fontes
 

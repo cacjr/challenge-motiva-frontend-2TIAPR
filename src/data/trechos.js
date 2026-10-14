@@ -79,4 +79,16 @@ export const trechos = [
     atencao: true,
     atualizadoEm: '2026-10-07T10:05:00',
   },
+  {
+    id: 't-br163-720',
+    rodovia: 'BR-163/MS',
+    referencia: 'Coxim · (ponte do rio Taquari)',
+    kmInicial: 720,
+    kmFinal: 760,
+    cobertura: 'sombra parcial',
+    situacao: 'Ponte estreita com neblina no fim da tarde',
+    silencioMedioMin: 16,
+    atencao: true,
+    atualizadoEm: '2026-10-17T17:20:00',
+  }
 ]
