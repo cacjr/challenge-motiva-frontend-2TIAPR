@@ -1,0 +1,12 @@
+Desafio Motiva - Sprint 1 - 2TIAPR
+Projeto: Elo - nenhuma ocorrência fica em silêncio
+
+Integrantes (Nome - RM):
+- Claudio Alves - RM 568565
+- Erick Miguel - RM 564896
+- Gustavo Duarte - RM 567066
+- Leonardo Pereira - RM 567836
+- Sarah Marangoni - RM 566764
+
+Link do repositório (branch main):
+https://github.com/cacjr/challenge-motiva-frontend-2TIAPR

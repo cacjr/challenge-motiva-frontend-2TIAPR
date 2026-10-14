@@ -1,0 +1,82 @@
+// Dados fixos da Sprint 1. Trechos da BR-163/MS com km aproximados.
+// Cobertura, situações e minutos de silêncio são simulados para a aula,
+// não são um boletim oficial da Motiva Pantanal.
+// cobertura: 'sinal' | 'sombra parcial' | 'sombra total'
+// silencioMedioMin: minutos médios entre o fato e a central saber, no trecho.
+// TODO Sprint 2: este array deixa de alimentar a tela direto.
+// Ele vira o valor inicial do useState de trechos no App.jsx
+// (ou a lista começa vazia e o colaborador cadastra pelo formulário).
+export const trechos = [
+  {
+    id: 't-br163-000',
+    rodovia: 'BR-163/MS',
+    referencia: 'Mundo Novo · Eldorado',
+    kmInicial: 0,
+    kmFinal: 40,
+    cobertura: 'sinal',
+    situacao: 'Frente de conservação no acostamento com 4 colaboradores',
+    silencioMedioMin: 2,
+    atencao: false,
+    atualizadoEm: '2026-10-06T08:10:00',
+  },
+  {
+    id: 't-br163-300',
+    rodovia: 'BR-163/MS',
+    referencia: 'Rio Brilhante',
+    kmInicial: 300,
+    kmFinal: 345,
+    cobertura: 'sombra parcial',
+    situacao: 'Neblina matinal e fluxo intenso de bitrens',
+    silencioMedioMin: 14,
+    atencao: true,
+    atualizadoEm: '2026-10-06T06:45:00',
+  },
+  {
+    id: 't-br163-455',
+    rodovia: 'BR-163/MS',
+    referencia: 'Campo Grande (perímetro)',
+    kmInicial: 455,
+    kmFinal: 490,
+    cobertura: 'sinal',
+    situacao: 'Obra de duplicação com desvio de pista',
+    silencioMedioMin: 1,
+    atencao: false,
+    atualizadoEm: '2026-10-05T15:20:00',
+  },
+  {
+    id: 't-br163-540',
+    rodovia: 'BR-163/MS',
+    referencia: 'Bandeirantes · São Gabriel do Oeste',
+    kmInicial: 540,
+    kmFinal: 600,
+    cobertura: 'sombra total',
+    situacao: 'Travessia recorrente de fauna (anta) à noite',
+    silencioMedioMin: 27,
+    atencao: true,
+    atualizadoEm: '2026-10-05T22:40:00',
+  },
+  {
+    id: 't-br163-670',
+    rodovia: 'BR-163/MS',
+    referencia: 'Rio Verde de Mato Grosso',
+    kmInicial: 670,
+    kmFinal: 710,
+    cobertura: 'sombra total',
+    situacao: 'Descida de serra com curvas e caminhões pesados',
+    silencioMedioMin: 34,
+    atencao: true,
+    atualizadoEm: '2026-10-06T14:35:00',
+  },
+  {
+    id: 't-br163-770',
+    rodovia: 'BR-163/MS',
+    referencia: 'Pedro Gomes · Sonora',
+    kmInicial: 770,
+    kmFinal: 845,
+    cobertura: 'sombra parcial',
+    situacao: 'Equipe de roçada isolada, longe da base',
+    silencioMedioMin: 19,
+    atencao: true,
+    atualizadoEm: '2026-10-07T10:05:00',
+  },
+]
