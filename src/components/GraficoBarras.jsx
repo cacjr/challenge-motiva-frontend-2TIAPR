@@ -15,6 +15,7 @@ export default function GraficoBarras({
   rotuloValor = 'Quantidade',
   leitura,
   largo = false,
+  unidade = '',
 }) {
   const dados = {
     labels,
@@ -57,7 +58,7 @@ export default function GraficoBarras({
           data={dados}
           options={opcoes}
           role="img"
-          aria-label={`${titulo}. ${descreverSerie(labels, valores)}`}
+          aria-label={`${titulo}. ${descreverSerie(labels, valores, unidade)}`}
         />
       </div>
       {leitura && <p className="grafico-leitura">{leitura}</p>}

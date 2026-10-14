@@ -158,7 +158,7 @@ Cada linha descreve o que a pessoa **de fato** commitou. O histórico do Git con
 | Claudio Alves | 568565 | Base do projeto (React + Vite, componentes, telas, dados e gráficos), pesquisa sobre a Motiva, README, fluxo de dados centralizado no App e reposicionamento do Elo como agente de voz |
 | Erick Miguel | 564896 | _pendente: tarefa 1, 7º trecho em `trechos.js` (ver `TAREFAS.md`)_ |
 | Gustavo Duarte | 567066 | _pendente: tarefa 2, novo comando de voz em `interacoes.js` (ver `TAREFAS.md`)_ |
-| Leonardo Pereira | 567836 | _pendente: tarefa 3, 4º velocímetro em `resumoDashboard.js` (ver `TAREFAS.md`)_ |
+| Leonardo Pereira | 567836 | Inclusão do 4º velocímetro de registros iniciados por voz, unidade de medida no aria-label do gráfico Mapa do Silêncio |
 | Sarah Marangoni | 566764 | _pendente: tarefa 4, novo princípio em `comoFunciona.js` (ver `TAREFAS.md`)_ |
 
 ## Fontes
