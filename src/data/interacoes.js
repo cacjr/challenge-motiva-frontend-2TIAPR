@@ -77,12 +77,23 @@ export const interacoes = [
   {
     id: 'i-7',
     canal: 'botao',
-    texto: 'Toque longo no botão do colete, km 790. Roçadeira ligada: a voz não seria entendida.',
+    texto: 'Toque longo no botão do colete, km 810. Roçadeira ligada: a voz não seria entendida.',
     data: '2026-10-07T10:14:00',
-    codigo: 'E1|790.6|N|SOS|ALTA|COLAB|R03|1014',
+    codigo: 'E1|810.2|N|SOS|ALTA|COLAB|R03|1014',
     rota: 'LoRa → call box km 815 → base Sonora',
     silencioMin: 2,
     resposta:
       'SOS da equipe R03. O botão não precisa de tela nem de sinal: o rádio LoRa do colete alcançou o call box do km 815. Assim que o barulho parar, eu chamo por voz para entender o que houve.',
+  },
+  {
+    id: 'i-8',
+    canal: 'voz',
+    texto: 'Elo, neblina forte no km 330, visibilidade abaixo de 50 metros, bitrens passando rápido.',
+    data: '2026-10-08T06:38:00',
+    codigo: 'E1|330.0|S|NEB|ALTA|V0|0638',
+    rota: 'SMS 2G → central',
+    silencioMin: 5,
+    resposta:
+      'Entendi: neblina forte, km 330, visibilidade abaixo de 50 m. Confirma? Vou pedir à central para acionar o painel de mensagem e a sinalização de redução de velocidade. Fique no acostamento protegido, com o colete visível, até a viatura chegar.',
   },
 ]
