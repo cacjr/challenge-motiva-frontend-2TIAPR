@@ -1,12 +1,12 @@
 // Histórico simulado de comandos ao Elo, o agente de voz do colaborador de campo.
-// O agente ainda não existe: ninguém ouve o microfone, nenhum botão está
-// pareado e nenhum pacote trafega. A resposta é texto fixo, escrito à mão.
+// Histórico simulado, escrito à mão: nenhum botão está pareado e nenhum pacote
+// trafega. O Elo ao vivo (microfone + NLU) está em pages/FalarComElo.jsx.
 // canal: 'voz' (o caminho principal) | 'botao' | 'automatico' (plano B,
 // quando a voz não dá).
 // codigo: o Código Elo (~50 bytes) que sairia do aparelho.
 // rota: por onde o pacote teria chegado à central (4G, SMS, LoRa ou carona).
 // silencioMin: minutos entre o fato e a central receber.
-// Todo km citado aqui está dentro de um trecho de src/data/trechos.js.
+// Todo km citado aqui está dentro de um trecho de src/data/exemplo.js.
 export const interacoes = [
   {
     id: 'i-1',

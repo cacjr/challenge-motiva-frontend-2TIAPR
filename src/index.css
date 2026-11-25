@@ -1,41 +1,74 @@
+/* Tema Motiva: papel off-white lilás (Neutro 20), tinta quase preta (Neutro 100),
+   anil como cor de marca, e violeta, turquesa e laranja só em pequenas doses.
+   Códigos extraídos do Guia Rápido da marca (v1.4, 2025). */
 :root {
-  font-family: 'Source Sans 3', 'Segoe UI', system-ui, sans-serif;
-  line-height: 1.45;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  line-height: 1.55;
   font-weight: 400;
-  color: #1a1d33;
-  background: #eceef8;
+  color: #18191c;
+  background: #f5f5ff;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color-scheme: light;
 
-  /* Paleta inspirada no azul índigo da marca Motiva (2025).
-     Âmbar marca alerta: silêncio acima do limite, trecho em atenção. */
-  --ink: #1a1d33;
-  --muted: #5b6075;
-  --line: #dcdff0;
-  --navy: #1f2366;
-  --navy-2: #3f4bb8;
-  --accent: #f2a541;
-  --alerta: #b4600f;
-  --teal: #1a7a78;
-  --ceu: #dfe3f8;
-  --paper: #eceef8;
-  --surface: #ffffff;
+  /* neutros da marca */
+  --bg: #f5f5ff;
+  --bg-2: #ecebfa;
+  --card: #ffffff;
+  --card-2: #f9f9ff;
+  --line: #e6e5f3;
+  --line-2: #d6d5eb;
+  --ink: #18191c;
+  --muted: #6b6b8a;
+  --dim: #8484a2;
+
+  /* marca */
+  --anil: #5e22f3;
+  --anil-2: #4811d1;
+  --anil-deep: #23195c;
+  --anil-soft: #efe9ff;
+  --violeta: #ba38e3;
+  --turquesa: #2fc8e3;
+  --turq-texto: #056b7d;
+  --turq-soft: #e6f9fc;
+  --laranja: #ff682c;
+  --laranja-texto: #dd511a;
+  --laranja-soft: #fff0ea;
+
+  /* aliases usados pelos componentes */
+  --coral: var(--anil);
+  --coral-2: var(--laranja-texto);
+  --coral-soft: var(--laranja-soft);
+  --accent: var(--laranja);
+  --alerta: var(--laranja-texto);
+  --blue: var(--anil);
+  --blue-2: #8655ff;
+  --blue-soft: var(--anil-soft);
+  --teal: var(--turq-texto);
+  --teal-soft: var(--turq-soft);
+  --navy: var(--ink);
+  --navy-2: var(--anil);
+  --ceu: var(--anil-soft);
+  --surface: var(--card);
+  --paper: var(--bg);
 }
 
 * {
   box-sizing: border-box;
 }
 
+::selection {
+  background: var(--anil);
+  color: #ffffff;
+}
+
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background:
-    radial-gradient(900px 420px at -10% -10%, #d9ddf6 0, transparent 60%),
-    radial-gradient(700px 380px at 110% 0, #fde7cf 0, transparent 55%),
-    var(--paper);
+  background: var(--bg);
 }
 
 #root {
@@ -49,21 +82,25 @@ a {
   font: inherit;
 }
 
+h1,
 h2,
 h3 {
   color: var(--ink);
-  font-weight: 700;
-  letter-spacing: -0.02em;
 }
 
 h2 {
   margin: 0 0 8px;
-  font-size: 1.7rem;
+  font-family: 'Inter Tight', 'Inter', system-ui, sans-serif;
+  font-size: clamp(1.7rem, 2.6vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.12;
 }
 
 h3 {
   margin: 0 0 12px;
   font-size: 1rem;
+  font-weight: 600;
 }
 
 p {
@@ -71,6 +108,10 @@ p {
 }
 
 code {
-  font-family: 'Cascadia Mono', Consolas, monospace;
-  font-size: 0.88em;
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', Consolas, monospace;
+  font-size: 0.86em;
+}
+
+a {
+  color: var(--anil);
 }

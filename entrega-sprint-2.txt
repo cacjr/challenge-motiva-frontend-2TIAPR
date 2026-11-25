@@ -1,0 +1,15 @@
+Desafio Motiva - Sprint 2 - 2TIAPR
+Projeto: Elo - o agente de voz para que nenhuma ocorrência fique em silêncio
+
+Integrantes (Nome - RM):
+- Claudio Alves - RM 568565
+- Erick Miguel - RM 564896
+- Gustavo Duarte - RM 567066
+- Leonardo Pereira - RM 567836
+- Sarah Marangoni - RM 566764
+
+Link do repositório (branch main, o mesmo da Sprint 1):
+https://github.com/cacjr/challenge-motiva-frontend-2TIAPR
+
+Link do vídeo no YouTube (não listado):
+COLAR AQUI O LINK DO VÍDEO

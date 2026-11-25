@@ -7,15 +7,15 @@ registrarCharts()
 
 const CORES = [cores.indigo, cores.azul, cores.ambar, cores.lavanda]
 
-// Pizza mostra parte de um todo (aqui, a rota de chegada das ocorrências).
-// CORES segue a paleta índigo e âmbar do index.css.
-export default function GraficoPizza({ titulo, labels, valores, leitura }) {
+// Pizza mostra parte de um todo. CORES segue a paleta do index.css;
+// paleta (opcional) troca as cores, uma por fatia, na ordem dos labels.
+export default function GraficoPizza({ titulo, labels, valores, leitura, paleta = CORES }) {
   const dados = {
     labels,
     datasets: [
       {
         data: valores,
-        backgroundColor: labels.map((_, indice) => CORES[indice % CORES.length]),
+        backgroundColor: labels.map((_, indice) => paleta[indice % paleta.length]),
         borderWidth: 0,
       },
     ],
@@ -31,7 +31,7 @@ export default function GraficoPizza({ titulo, labels, valores, leitura }) {
           boxWidth: 8,
           boxHeight: 8,
           padding: 14,
-          color: '#3a3f55',
+          color: '#3B3C44',
         },
       },
     },

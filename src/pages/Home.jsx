@@ -1,10 +1,12 @@
 import PainelGraficos from '../components/PainelGraficos.jsx'
 import TabelaTrechos from '../components/TabelaTrechos.jsx'
-import { somar } from '../utils/formatar.js'
+import { analisarTrecho } from '../utils/analisarTrecho.js'
 
-export default function Home({ plataforma, trechos, interacoes, resumo, onNavegar }) {
+export default function Home({ plataforma, trechos, ocorrencias, trechoAtual, resumo, onNavegar, onAbrirTrecho }) {
   const emSombra = trechos.filter((trecho) => trecho.cobertura !== 'sinal').length
-  const ocorrenciasMes = somar(resumo.ocorrenciasPorRota.valores)
+  const emAberto = ocorrencias.filter((o) => o.status !== 'resolvida')
+  const gravesAbertas = emAberto.filter((o) => o.gravidade === 'alta').length
+  const atual = trechoAtual ? analisarTrecho(ocorrencias.filter((o) => o.trechoId === trechoAtual.id)) : null
 
   return (
     <section className="painel">
@@ -16,22 +18,14 @@ export default function Home({ plataforma, trechos, interacoes, resumo, onNavega
           <strong>Quem usa:</strong> {plataforma.usuario}. {plataforma.resumo}
         </p>
         <p className="acoes">
-          <button type="button" className="link-acao" onClick={() => onNavegar('consultas')}>
-            Consultar trechos
+          <button type="button" className="link-acao" onClick={() => onNavegar('ocorrencias')}>
+            Registrar ocorrência
           </button>
-          <button
-            type="button"
-            className="link-acao secundario"
-            onClick={() => onNavegar('interacoes')}
-          >
-            Ler interações
+          <button type="button" className="link-acao secundario" onClick={() => onNavegar('elo')}>
+            Falar com o Elo
           </button>
-          <button
-            type="button"
-            className="link-acao secundario"
-            onClick={() => onNavegar('sobre')}
-          >
-            Como funciona
+          <button type="button" className="link-acao secundario" onClick={() => onNavegar('trechos')}>
+            Cadastrar trecho
           </button>
         </p>
       </div>
@@ -46,27 +40,41 @@ export default function Home({ plataforma, trechos, interacoes, resumo, onNavega
           <dd>{emSombra}</dd>
         </div>
         <div className="ind ind-teal">
-          <dt>Comandos ao Elo</dt>
-          <dd>{interacoes.length}</dd>
+          <dt>Ocorrências em aberto</dt>
+          <dd>{emAberto.length}</dd>
         </div>
         <div className="ind ind-ceu">
-          <dt>Ocorrências no recorte</dt>
-          <dd>{ocorrenciasMes}</dd>
+          <dt>Graves em aberto</dt>
+          <dd>{gravesAbertas}</dd>
         </div>
       </dl>
 
+      {trechoAtual && (
+        <div className={`trecho-atual-faixa ${atual.alerta ? 'com-alerta' : ''}`}>
+          <p>
+            <strong>Trecho atual:</strong> {trechoAtual.rodovia} · km {trechoAtual.kmInicial}–{trechoAtual.kmFinal}
+            {trechoAtual.referencia && ` · ${trechoAtual.referencia}`} — {atual.total} ocorrências, {atual.abertas} em aberto
+            {atual.alerta && <span className="selo selo-gravidade-alta">Alerta</span>}
+          </p>
+          <button type="button" className="link-acao mini" onClick={() => onNavegar('ocorrencias')}>
+            Abrir painel do trecho
+          </button>
+        </div>
+      )}
+
       <div className="cabeca-painel">
-        <h3>Painel resumido do recorte</h3>
-        <button
-          type="button"
-          className="link-acao secundario"
-          onClick={() => onNavegar('dashboard')}
-        >
+        <h3>Panorama das {resumo.total} ocorrências registradas</h3>
+        <button type="button" className="link-acao secundario" onClick={() => onNavegar('dashboard')}>
           Ver o Mapa do Silêncio no Dashboard
         </button>
       </div>
       <PainelGraficos resumo={resumo} />
-      <TabelaTrechos trechos={trechos} />
+      <TabelaTrechos
+        trechos={trechos}
+        ocorrencias={ocorrencias}
+        trechoAtualId={trechoAtual?.id}
+        onAbrir={onAbrirTrecho}
+      />
     </section>
   )
 }

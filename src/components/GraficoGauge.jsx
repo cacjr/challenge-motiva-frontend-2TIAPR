@@ -5,7 +5,7 @@ import { cores } from '../utils/cores.js'
 registrarCharts()
 
 // Velocímetro: meia rosca. valor / maximo preenche o arco.
-// Cada índice novo é um objeto em velocimetros (resumoDashboard.js).
+// Cada índice novo é um objeto em velocimetros (utils/indicadores.js).
 export default function GraficoGauge({
   titulo,
   valor,
@@ -19,7 +19,7 @@ export default function GraficoGauge({
     datasets: [
       {
         data: [valor, resto],
-        backgroundColor: [cor, '#e5e7f2'],
+        backgroundColor: [cor, '#E6E5F3'],
         borderWidth: 0,
       },
     ],

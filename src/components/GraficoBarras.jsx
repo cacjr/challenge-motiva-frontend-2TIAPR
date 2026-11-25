@@ -40,12 +40,12 @@ export default function GraficoBarras({
     scales: {
       x: {
         grid: { display: false },
-        ticks: { color: '#5b6075' },
+        ticks: { color: '#6B6B8A' },
       },
       y: {
         beginAtZero: true,
-        ticks: { precision: 0, color: '#5b6075' },
-        grid: { color: '#e6e8f2' },
+        ticks: { precision: 0, color: '#6B6B8A' },
+        grid: { color: '#E6E5F3' },
         border: { display: false },
       },
     },

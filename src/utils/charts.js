@@ -23,8 +23,8 @@ export function registrarCharts() {
   )
 
   ChartJS.defaults.font.family = "'Source Sans 3', 'Segoe UI', sans-serif"
-  ChartJS.defaults.color = '#5b6075'
-  ChartJS.defaults.borderColor = '#e2e4ef'
+  ChartJS.defaults.color = '#6B6B8A'
+  ChartJS.defaults.borderColor = '#E6E5F3'
 
   const menosMovimento = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
   if (menosMovimento) ChartJS.defaults.animation = false

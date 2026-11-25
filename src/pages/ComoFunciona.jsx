@@ -5,9 +5,13 @@ export default function ComoFunciona({ conteudo }) {
     <section>
       <h2>Como funciona</h2>
       <p className="intro">
-        O caminho de um registro, da fala do colaborador até a central. Esta
-        tela descreve a solução proposta. Na Sprint 1 nada disso está ligado:
-        os dados das outras telas simulam o resultado.
+        O caminho de um registro, da fala do colaborador até a central. Já
+        funciona de verdade: a fala no navegador, o entendimento pelo NLU (regras
+        do projeto de PLN), a confirmação, a ocorrência gravada no trecho certo
+        com status e painel, e o encaminhamento aos setores. Tudo fica salvo no
+        navegador. Ainda é simulado: rodar no aparelho sem internet, o botão
+        LoRa, o homem caído e a cascata de envio (a rota é prevista pela
+        cobertura do trecho).
       </p>
 
       <h3 className="etapa">1. Falar com o Elo</h3>

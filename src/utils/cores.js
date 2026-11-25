@@ -1,6 +1,6 @@
 export const cores = {
-  indigo: '#1f2366',
-  azul: '#3f4bb8',
-  ambar: '#c26a12',
-  lavanda: '#9aa1c9',
+  indigo: '#5E22F3',
+  azul: '#8655FF',
+  ambar: '#FF682C',
+  lavanda: '#CCB8FF',
 }

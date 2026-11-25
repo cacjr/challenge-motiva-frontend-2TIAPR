@@ -1,165 +1,272 @@
 # Elo: o agente de voz para que nenhuma ocorrência fique em silêncio
 
-Desafio Motiva · Sprint 1 · FIAP 2TIAPR · 2026
+Desafio Motiva · **Sprint 2** · FIAP 2TIAPR · 2026
+
+O Elo é a plataforma do colaborador de campo da Motiva Pantanal (BR-163/MS). Nesta sprint ele deixou de ser um MVP de consulta e virou uma ferramenta de uso real. O colaborador:
+
+- cadastra trechos;
+- registra ocorrências pelo formulário **ou falando com o Elo**;
+- acompanha cada trecho num painel calculado;
+- filtra e atualiza o status das ocorrências.
+
+Tudo fica salvo no navegador (`localStorage`), e F5 não apaga nada.
 
 ## O problema
 
-> Na BR-163/MS (Motiva Pantanal), quando um colaborador de campo presencia um acidente, ou se acidenta, numa zona sem sinal de celular, a central só fica sabendo quando alguém acha sinal. Esse intervalo não é medido por ninguém.
+Na BR-163/MS há longos trechos sem 4G. Quando um inspetor, um socorrista ou uma equipe de conservação presencia um acidente, ou se acidenta, a central só fica sabendo quando alguém acha sinal. O prazo de atendimento da ANTT (15 min) conta **do acionamento**, não do fato.
 
-Os prazos de atendimento (ANTT: atendimento médico em até 15 min) começam a contar **do acionamento**, não do fato. Chamamos de **tempo de silêncio** os minutos entre o fato acontecer e a central saber. O Elo dá nome a esse intervalo, mede onde ele acontece e encurta cada minuto dele.
+Chamamos de **tempo de silêncio** os minutos entre o fato acontecer e a central saber. O Elo mede esse tempo em cada ocorrência (`horaFato` × `registradoEm`) e mostra onde ele acontece.
 
-**Por que importa para a Motiva**
-- Em 2025 a Motiva registrou 9 óbitos de trabalho (2 próprios e 7 terceirizados), 8 deles em rodovias. Atropelamento é o principal perigo listado (Relatório de Sustentabilidade 2025).
-- A BR-163/MS tem 845 km, cerca de 80% de tráfego comercial e longos trechos sem 4G contínuo (a cobertura total faz parte do novo contrato).
-- Satélite direto no celular (Starlink Direct to Cell, SOS da Apple) ainda não está disponível no Brasil, com previsão para 2027. A lacuna é real e tem prazo.
-- A Motiva trata "acidente zero" como condição inegociável, e **Segurança** é o primeiro dos seus princípios.
+**Por que importa para a Motiva:**
+- Em 2025 foram 9 óbitos de trabalho, 8 deles em rodovias, com o atropelamento como principal perigo (Relatório de Sustentabilidade 2025).
+- **Segurança** é o primeiro princípio da empresa.
 
-## Quem usa
+**Quem usa:** o colaborador de campo da Motiva Pantanal (inspeção de tráfego, APH e conservação) e a central (CCO).
 
-Colaborador de campo da Motiva Pantanal: inspeção de tráfego, atendimento pré-hospitalar (APH) e equipes de conservação. O motorista da rodovia fica para uma sprint futura.
+## O que a plataforma faz (Sprint 2)
 
-## A solução: o Elo é um agente de voz
-
-O colaborador **fala** com o Elo, e a palavra de ativação é o próprio nome. O agente roda no aparelho, sem internet, transforma a frase em um registro e lê de volta para confirmar.
-
-| Comando | Exemplo |
+| Requisito do enunciado | Como foi feito |
 |---|---|
-| Registrar | "Elo, colisão no km 688, duas vítimas, uma presa." |
-| Consultar | "Elo, como está o sinal até o km 700?" |
-| Check-in | "Elo, check-in da equipe R03." |
-| Anexar | "Elo, manda a foto depois." |
-| Pedir socorro | "Elo, socorro." |
+| 1. Estado na plataforma | O `App.jsx` concentra `trechos`, `trechoAtualId` e `ocorrencias` (mais o estado do agente de voz). Nenhum array fixo alimenta as telas. |
+| 2. Cadastro de trechos | `FormTrecho` controlado: rodovia, km inicial, km final, referência e cobertura de celular. O `id` é único, gerado no App. Trechos da mesma rodovia não podem se sobrepor. O trecho atual é escolhido em Trechos, em Ocorrências ou clicando na tabela do Início. |
+| 3. Registro de ocorrências | `FormOcorrencia`: tipo, gravidade, descrição, km (opcional) e hora do fato. O App carimba `trechoId`, data/hora do registro e status `aberta`. **Isolamento:** a tela filtra por `trechoId` antes de listar. |
+| 4. Consulta e filtro | `ListaOcorrencias` mostra só o trecho selecionado, com `FiltroOcorrencias` por gravidade, tipo e status. O `Selo` colore a gravidade. Há mensagem de vazio para trecho sem ocorrência e para filtro sem resultado. |
+| 5. Painel do trecho | `PainelTrecho` desenha o que `src/utils/analisarTrecho.js` calcula: total, gravidade alta, em aberto, tipo mais frequente, silêncio médio e **alerta**. |
+| 6. Atualização de status | Cada ocorrência tem `aberta`, `em_atendimento` ou `resolvida`, trocado no próprio card ou por voz ("cheguei no local", "via liberada"). Toda mudança entra no histórico. |
+| 7. Persistência | **Um** objeto no `localStorage` (chave `elo:motiva:v2`). É lido na criação do estado e gravado a cada mudança. |
+| 8. Componentização | `FormTrecho`, `ListaTrechos`, `FormOcorrencia`, `ListaOcorrencias`, `PainelTrecho` e `Selo`, além de `CardOcorrencia` e `FiltroOcorrencias`. Os props estão descritos abaixo, e toda lista usa `key={item.id}`. |
 
-**Plano B, quando a voz não dá** (barulho, colaborador desacordado):
-- **Botão no colete (LoRa):** 1 toque faz check-in, 2 toques abrem ocorrência, toque longo é SOS.
-- **Homem caído automático:** o acelerômetro detecta a queda e o Elo pergunta "Você está bem?". Sem resposta em 30 s, dispara SOS.
-- **Toque em 3 telas:** tipo › gravidade › vítimas.
+**Além do pedido:**
+- **Agente de voz real:** o colaborador fala e a ocorrência cai no trecho certo pelo km falado.
+- **Encaminhamento a setores**, com o Elo sugerindo quem atende.
+- **Dashboard calculado** a partir das ocorrências.
+- **Botões de dados de exemplo**, para testar rápido.
 
-**Depois da fala:**
-1. **Autopreenchimento inteligente.** O GPS preenche km, sentido e trecho. A escala do dia preenche colaborador e equipe. O relógio registra a hora **do fato**.
-2. **Código Elo.** O registro vira cerca de 50 bytes, por exemplo `E1|688.2|N|COL|ALTA|V2|P1|1432`, e cabe em um SMS ou num pacote LoRa.
-3. **Cascata de envio.** 4G → SMS (2G) → LoRa mesh (colete, viaturas, call boxes, bases) → **carona** (*store-and-forward*: o pacote viaja numa viatura até achar sinal) → satélite (2027).
-4. **Central e Escudo de Pista.** A central faz o pré-despacho antes de qualquer ligação. As equipes fazem check-in por voz; sem check-in, ou com homem caído, o alerta sobe pela mesma cascata.
+## Telas
 
-**Ligação com os princípios da Motiva:**
-- **Segurança:** mede e reduz o minuto invisível.
-- **Simplicidade:** registrar falando, sem digitar.
-- **Servir a Sociedade:** socorro mais cedo onde a malha é mais isolada.
-- **Excelência:** uma métrica nova e auditável.
+| Tela | O que faz |
+|---|---|
+| **Início** | Problema, indicadores calculados, faixa do trecho atual (com alerta), gráficos por tipo e gravidade, velocímetros e leitura rápida de todos os trechos |
+| **Falar com o Elo** | Microfone (ou texto) → NLU → o Elo lê de volta e pede "Confirma?" → a ocorrência é gravada no trecho do km falado. Mostra o que o NLU entendeu e a central ao vivo |
+| **Trechos** | Cadastro, lista com números de cada trecho, seleção do trecho atual, **Restaurar exemplo** e **Começar do zero** |
+| **Ocorrências** | Trecho atual: painel, formulário, filtro e histórico com status editável |
+| **Dashboard** | KPIs, Mapa do Silêncio, como o registro começou, rota de chegada, velocímetros, ação rápida por voz e interações recentes |
+| **Encaminhamentos** | Setores sugeridos para cada ocorrência em aberto; a central encaminha e o setor confirma |
+| **Interações** | Últimas 20 falas ao Elo (salvas) e o histórico simulado da Sprint 1 |
+| **Como funciona** | A solução completa: comandos de voz, plano B, Código Elo, cascata de envio e princípios da Motiva |
 
-## O que esta Sprint 1 entrega
+### Prints
 
-A plataforma **consulta**, não cadastra. Tudo vem de arrays fixos em `src/data/`. O agente de voz **não existe ainda**: ninguém ouve o microfone e as respostas são texto fixo escrito nos arrays.
+| | |
+|---|---|
+| ![Início](docs/prints/01-inicio.jpg) Início: indicadores e painel calculados | ![Trechos](docs/prints/02-trechos.jpg) Trechos: cadastro e seleção |
+| ![Ocorrências](docs/prints/03-ocorrencias-painel.jpg) Ocorrências: painel do trecho com alerta | ![Filtro](docs/prints/04-ocorrencias-filtro.jpg) Filtro por gravidade, Selo e status |
+| ![Falar com o Elo](docs/prints/05-falar-com-elo.jpg) Voz: o Elo pede confirmação | ![Dashboard](docs/prints/06-dashboard.jpg) Dashboard calculado |
+| ![Encaminhamentos](docs/prints/07-encaminhamentos.jpg) Encaminhamentos a setores | |
 
-| Tela | O que faz | De onde vêm os dados |
+## Vocabulário (o mesmo no formulário, no filtro, no Selo e no NLU)
+
+Definido em `src/data/dominio.js`.
+
+| Campo | Valores |
+|---|---|
+| `tipo` | `acidente`, `atropelamento`, `animal_na_pista`, `obstaculo`, `veiculo_parado`, `buraco`, `sinalizacao`, `vegetacao`, `outro` |
+| `gravidade` | `baixa` (verde), `media` (âmbar), `alta` (laranja-escuro) |
+| `status` | `aberta` → `em_atendimento` → `resolvida` (e pode reabrir) |
+| `cobertura` (trecho) | `sinal`, `sombra parcial`, `sombra total` |
+| `canal` | `voz`, `formulario`, `botao`, `automatico` (os dois últimos são o plano B, presentes nos exemplos) |
+| `rota` | `4G`, `SMS (2G)`, `LoRa mesh`, `Carona` (prevista pela cobertura do trecho) |
+
+**Por que tipos "mistos".** O enunciado sugere vegetação, buraco, sinalização e outro. Mantivemos esses e acrescentamos os tipos de **segurança viária** que o Elo já entende por voz (acidente, atropelamento, animal na pista...). Na BR-163, quem mais precisa de um registro rápido é quem presencia um acidente. A voz em detalhe (por exemplo, "vítima presa") é traduzida para esses tipos por `TIPO_DO_GLOSSARIO`.
+
+## Como o estado e o `localStorage` estão organizados
+
+O `App.jsx` é o **único dono** do estado:
+
+```js
+const [inicial] = useState(lerEstado)               // lê o localStorage UMA vez
+const [trechos, setTrechos] = useState(inicial.trechos)
+const [trechoAtualId, setTrechoAtualId] = useState(inicial.trechoAtualId)
+const [ocorrencias, setOcorrencias] = useState(inicial.ocorrencias)
+const [elo, setElo] = useState({ ...inicial.elo, pendente: null })
+
+useEffect(() => {                                    // grava a cada mudança
+  salvarEstado({ trechos, trechoAtualId, ocorrencias, elo: { comandos: elo.comandos, log: elo.log } })
+}, [trechos, trechoAtualId, ocorrencias, elo])
+```
+
+A leitura acontece **na criação do estado**, não num `useEffect`. Assim o vazio nunca é gravado por cima do que estava salvo (o erro visto na aula de 26/08). As telas só recebem props e avisam o App por funções como `onCadastrar`, `onSelecionar`, `onRegistrar`, `onStatus` e `onAgente`.
+
+**O objeto salvo** (chave `elo:motiva:v2`, em `src/utils/persistencia.js`):
+
+```js
+{
+  versao: 2,
+  trechos: [{ id, rodovia, referencia, kmInicial, kmFinal, cobertura }],
+  trechoAtualId: 't-br163-670',
+  ocorrencias: [{
+    id, trechoId,                       // carimbo do trecho (isolamento)
+    tipo, descricao, gravidade, status, // o que o enunciado pede
+    horaFato, registradoEm,             // a diferença é o tempo de silêncio
+    atendimentoEm, resolvidaEm,         // carimbados quando o status muda
+    km, sentido, canal, rota, codigo,   // contexto do Elo
+    recursos, condicoes, encaminhamentos, historico,
+  }],
+  elo: { comandos, log },               // últimas 20 falas ao agente
+}
+```
+
+**Regras da persistência:**
+
+| Situação | O que acontece |
+|---|---|
+| Primeira visita, nada salvo | A plataforma abre com os 7 trechos da BR-163 e 14 ocorrências de exemplo, para o professor ver tudo funcionando. |
+| Objeto salvo inválido ou de outra versão | Volta para o exemplo. |
+| Página atual, filtro e rascunho do Elo aguardando "confirmo" | **Não** são salvos, porque são estado de tela: o F5 volta para o Início. Dados nunca se perdem. |
+| **Restaurar exemplo** / **Começar do zero** (tela Trechos) | Trocam todo o estado, com confirmação. |
+
+## Isolamento por trecho
+
+Cada ocorrência nasce com `trechoId`:
+- **No formulário**, é o trecho atual.
+- **Na voz**, é o trecho que contém o km falado (`trechoDoKm`). Sem km falado, vale o trecho atual (o GPS simulado é o meio do trecho). Se o km não pertence a nenhum trecho, o Elo recusa e pede para cadastrar.
+
+A tela Ocorrências faz `ocorrencias.filter((o) => o.trechoId === trecho.id)` **antes** do filtro e do `map`. Um trecho recém-cadastrado abre vazio, mesmo com 14 ocorrências em outros trechos.
+
+## Painel do trecho (`src/utils/analisarTrecho.js`)
+
+Nos moldes do `analisarPerfil` do CardioIA: recebe só as ocorrências de um trecho e devolve um objeto. Não desenha nada.
+
+| Campo | Significado |
+|---|---|
+| `total` | quantas ocorrências |
+| `graves` | quantas com gravidade alta |
+| `gravesAbertas` / `abertas` | quantas ainda não foram resolvidas |
+| `tipoFrequente` | o tipo que mais aparece (empate: ordem da lista de tipos) ou "Sem ocorrências" |
+| `silencioMedio` | média de minutos entre o fato e o registro |
+| `alerta` / `mensagemAlerta` | verdadeiro quando há **2 ou mais ocorrências de gravidade alta ainda não resolvidas** (`LIMITE_ALERTA`) |
+
+A regra do alerta olha as graves **em aberto**: um trecho com três acidentes já resolvidos não precisa de alarme, e um com dois ainda abertos precisa.
+
+## Componentes e props
+
+| Componente | Props | Papel |
 |---|---|---|
-| **Início** | Problema, quem usa, 4 indicadores, **painel resumido** (barras de entrada, pizza e velocímetros) e tabela de leitura rápida | `plataforma.js`, `trechos.js`, `interacoes.js`, `resumoDashboard.js` |
-| **Consultas** | Lista os trechos da BR-163/MS com cobertura, situação e silêncio médio | `trechos.js` |
-| **Interações** | Comandos simulados ao Elo, com resposta, Código Elo, rota e minutos de silêncio. Os itens de plano B aparecem marcados | `interacoes.js` |
-| **Dashboard** | A **análise completa**: o Mapa do Silêncio em destaque (só aparece aqui) e uma frase de leitura embaixo de cada gráfico (campo `leitura` nos dados) | `resumoDashboard.js` |
-| **Como funciona** *(além do pedido)* | Comandos de voz, plano B, autopreenchimento, Código Elo, cascata e princípios | `comoFunciona.js` |
+| `FormTrecho` | `trechos`, `onCadastrar(dados)` | Formulário controlado; valida com `validarTrecho` (`utils/validacao.js`) |
+| `ListaTrechos` | `trechos`, `ocorrencias`, `trechoAtualId`, `onSelecionar(id)`, `onAbrir(id)`, `onRemover(id)` | Uma linha por trecho com números de `analisarTrecho`; só remove trecho sem ocorrências |
+| `FormOcorrencia` | `trecho`, `onRegistrar(dados)` | Formulário controlado; sugere a gravidade padrão do tipo; valida km dentro do trecho e hora não futura |
+| `ListaOcorrencias` | `ocorrencias` (já do trecho e filtradas), `semNada`, `onStatus(id, status)` | `map` com `key`, mensagem de vazio diferente para "trecho sem nada" e "filtro sem resultado" |
+| `CardOcorrencia` | `ocorrencia`, `onStatus` | Selo, silêncio, canal → rota, Código Elo, `<select>` de status e histórico |
+| `FiltroOcorrencias` | `filtro`, `onFiltro`, `total`, `visiveis` | Selects controlados de gravidade, tipo e status, mais "Limpar filtro" |
+| `PainelTrecho` | `trecho`, `resumo` | Desenha o resultado de `analisarTrecho` e o alerta |
+| `Selo` | `tipo` (`gravidade` ou `status`), `valor` | Classe `selo-<tipo>-<valor>` muda a cor |
 
-### Fluxo de dados: um dono só
+## O agente de voz (Elo)
 
-O `App.jsx` é o **único** arquivo que importa de `src/data/`. Ele repassa tudo por props: `plataforma` para o Layout e a Home, `trechos` e `interacoes` para as telas, `resumo` para a Home, o Dashboard e o PainelGraficos, e `conteudo` para a tela Como funciona. Na Sprint 2, trocar um array por `useState` muda só o App.
+- **Reconhecimento:** usa o do navegador (`useVoz`). Funciona no **Chrome ou Edge, com internet**. Sem microfone, a mesma frase pode ser digitada.
+- **NLU:** `src/nlu/` traz as regras do projeto de PLN (normalização, intenções e entidades). Foram acrescentados buraco, sinalização e vegetação.
+- **Diálogo:** `src/nlu/agente.js` é uma função pura. Recebe a frase e o estado e devolve a fala e as mudanças, gravando na **mesma** lista de ocorrências do formulário.
 
-### De onde vem cada número
+Exemplo de conversa:
 
-**Indicadores da Início:**
+1. "Elo, colisão no km 688, sentido norte" → o Elo responde "Entendi: acidente, gravidade alta, km 688, Rio Verde de Mato Grosso. Confirma?"
+2. "Não, gravidade média" → ele corrige o rascunho e pergunta de novo.
+3. "Confirmo" → a ocorrência é gravada com `trechoId`, `canal: 'voz'` e a rota prevista pela cobertura.
 
-| Indicador | Cálculo |
+Depois do registro, o Elo também entende:
+
+| Frase | Efeito |
 |---|---|
-| Trechos monitorados | `trechos.length` |
-| Em zona de sombra | Trechos com `cobertura` diferente de `'sinal'` |
-| Comandos ao Elo | `interacoes.length` |
-| Ocorrências no recorte | Soma de `resumo.ocorrenciasPorRota.valores` (40) |
+| "Cheguei no local" | status em atendimento (etapa no histórico) |
+| "Via liberada" | resolvida |
+| "Preciso de uma ambulância" | recurso pedido e setor APH sugerido |
+| "Elo, direcionamento para o guincho" | encaminha ao setor de guincho |
+| "Como está a operação?" | panorama das ocorrências abertas |
 
-**Atenção:** as 40 ocorrências são um **recorte simulado de outubro**. Elas não são as linhas da tabela de trechos nem as interações. Os três primeiros números contam linhas dos arrays; o último conta o recorte dos gráficos.
+## Dashboard (`src/utils/indicadores.js`)
 
-**Gráficos (`src/data/resumoDashboard.js`):**
+Na Sprint 1 os gráficos liam um recorte fixo. Agora **todos** são calculados das ocorrências do estado:
 
-| Gráfico | Tipo | Pergunta que responde |
-|---|---|---|
-| **Mapa do Silêncio** *(além do pedido, só no Dashboard)* | Barras por faixa de km | Onde a malha fica muda? Minutos médios entre o fato e a central. Barras em âmbar passam de 10 min (`limiteMin`). |
-| Como o registro começou | Barras | A voz é mesmo o caminho principal? Voz 29, Botão 5, Homem caído 3, Toque 3 (total 40). |
-| Por onde o registro chegou | Pizza | Quanto da malha depende de algo além do 4G? 4G 17, SMS 8, LoRa 9, Carona 6 (total 40). |
-
-As barras de canal e a pizza contam **as mesmas 40 ocorrências**, partidas de dois jeitos. O Mapa do Silêncio é uma média por faixa, não uma contagem.
-
-**Velocímetros:**
-
-| Velocímetro | O que mede |
+| Gráfico | Como é calculado |
 |---|---|
-| Dentro de 15 min, contando do fato | 62% das ocorrências. É a régua da ANTT, mas contada desde o fato. |
-| Silêncio médio | 14 min no recorte. A meta do Elo é até 5. |
-| Equipes com check-in em dia | 11 de 13 frentes de serviço ativas. |
+| Mapa do Silêncio | Média de minutos de silêncio por faixa de 100 km. Barras em laranja passam de 10 min. |
+| Como o registro começou | Contagem por `canal`. |
+| Por onde chegou | Contagem por `rota`. |
+| Por tipo / por gravidade (Início) | Contagem por `tipo` e por `gravidade`. |
 
-### Valores usados nos dados
-
-- `cobertura`: `sinal`, `sombra parcial`, `sombra total`
-- `canal`: `voz` (caminho principal), `botao`, `toque`, `automatico` (plano B)
-
-## Acessibilidade
-
-- A marca é o `<h1>`, e cada tela tem o seu `<h2>`.
-- O link "Pular para o conteúdo" é o primeiro item do Tab.
-- O menu marca a tela atual com `aria-current="page"`. Ao trocar de tela, o foco vai para o conteúdo novo.
-- Barras e pizza têm `role="img"` e uma descrição em texto com todos os números (`descreverSerie` em `utils/formatar.js`). No velocímetro o número já está em HTML, então o desenho fica escondido do leitor de tela.
-- As tabelas têm `<caption>` e `scope="col"`.
-- Com `prefers-reduced-motion`, os gráficos aparecem sem animação.
-- O foco é visível em todos os botões e links.
-
-## Malha representada
-
-BR-163/MS, Motiva Pantanal (ex-MSVia). Os km são aproximados; situações, cobertura e minutos são **simulados para a aula** e não são boletim oficial da Motiva.
-
-## Paleta
-
-Cores em `:root` de `src/index.css`. O azul índigo é inspirado na marca Motiva de 2025, e o âmbar sinaliza alerta. Não usamos logo nem identidade oficial.
-
-## O que ficou para a próxima sprint
-
-- Os comentários `// TODO Sprint 2:` estão no código.
-- Trechos, trecho atual e ocorrências passam a viver em estado no `App.jsx`, num único objeto no `localStorage`.
-- Formulário de ocorrência, que será a versão "toque em 3 telas", com `trechoId`, tipo, gravidade, status e **hora do fato**.
-- Filtro, selo de gravidade e `analisarTrecho` (total, graves, tipo frequente, **silêncio médio** e alerta).
-- Futuro, fora do escopo do front: reconhecimento de voz real, protocolo do Código Elo, rede LoRa e canal do motorista.
+| Velocímetro | Como é calculado |
+|---|---|
+| Atendimento em até 15 min, contando do fato | % das ocorrências atendidas em que `atendimentoEm − horaFato ≤ 15 min` |
+| Silêncio médio | Média de `registradoEm − horaFato`, em minutos |
+| Resolvidas | Quantidade de ocorrências resolvidas |
+| Registros por voz | Quantidade de ocorrências com `canal: 'voz'` |
 
 ## Como rodar
 
-**Requisito: Node.js 20.19+ ou 22.12+.** O Vite 8 não roda em Node 18. Confira com `node -v`. O arquivo `.nvmrc` indica o Node 22 para quem usa nvm.
+**Requisito: Node.js 20.19+ ou 22.12+** (o Vite 8 não roda em Node 18). O `.nvmrc` indica o Node 22.
 
 ```bash
 npm install
 npm run dev
 ```
 
-Abra a URL que aparecer no terminal (padrão http://localhost:5173). Para gerar a build: `npm run build`.
+Abra a URL do terminal (padrão http://localhost:5173). Build de produção: `npm run build`.
 
-Stack: React 19, Vite 8, Chart.js e react-chartjs-2. Sem React Router: a navegação é por `useState`.
+Stack: React 19, Vite 8, Chart.js e react-chartjs-2. Sem React Router (a navegação é por `useState`) e sem biblioteca de CSS.
+
+### Roteiro de teste (o mesmo do vídeo)
+
+1. **Trechos** → cadastre `BR-163/MS`, km `600` a `660`, sombra total. Ele aparece na lista ordenado. Tente km `700` a `730` e veja o erro de sobreposição.
+2. Clique **Ver ocorrências** no trecho novo: ele está vazio, o que prova o isolamento.
+3. Registre duas ocorrências pelo formulário (uma de gravidade alta).
+4. Volte para Rio Verde (km 670–710): o painel mostra o **alerta**. Filtre por **gravidade alta**.
+5. Troque o status de uma ocorrência para **Em atendimento** e depois **Resolvida**. O painel recalcula.
+6. **Falar com o Elo** → "Elo, buraco grande no km 471" → "Confirmo". Ela aparece em Campo Grande.
+7. **F5**: tudo continua lá.
 
 ## Estrutura
 
 ```
 src/
-  components/  Header, Nav, Layout, CardTrecho, CardInteracao,
-               GraficoBarras, GraficoPizza, GraficoGauge, PainelGraficos, TabelaTrechos
-  pages/       Home, Consultas, Interacoes, Dashboard, ComoFunciona
-  data/        plataforma, trechos, interacoes, resumoDashboard, comoFunciona
-  utils/       formatar (formatarData, somar, coresPorLimite), charts
+  App.jsx                 estado, persistência e handlers (dono único dos dados)
+  components/             FormTrecho, ListaTrechos, FormOcorrencia, ListaOcorrencias,
+                          CardOcorrencia, FiltroOcorrencias, PainelTrecho, Selo,
+                          Layout, Nav, Header, Icone, AcaoRapida,
+                          GraficoBarras, GraficoPizza, GraficoGauge, PainelGraficos,
+                          TabelaTrechos, CardInteracao
+  pages/                  Home, FalarComElo, Trechos, Ocorrencias, Dashboard,
+                          Encaminhamentos, Interacoes, ComoFunciona
+  data/                   dominio (vocabulário), exemplo (trechos e ocorrências de exemplo),
+                          setores, plataforma, interacoes (Sprint 1), comoFunciona
+  utils/                  analisarTrecho, ocorrencias, persistencia, validacao,
+                          indicadores, encaminhamento, formatar, charts, cores
+  nlu/                    normalizacao, baseline (regras), regex, agente, glossario.json
+  hooks/                  useVoz (microfone e fala), useAgente (liga voz, NLU e estado)
+docs/prints/              prints das telas
 ```
 
-## Integrantes e contribuições
+## Malha representada
 
-Cada linha descreve o que a pessoa **de fato** commitou. O histórico do Git confirma.
+BR-163/MS, Motiva Pantanal. Os km são aproximados; ocorrências, horários e cobertura são **simulados para a aula** e não são boletim oficial da Motiva.
 
-| Integrante | RM | Contribuição |
-|---|---|---|
-| Claudio Alves | 568565 | Base do projeto (React + Vite, componentes, telas, dados e gráficos), pesquisa sobre a Motiva, README, fluxo de dados centralizado no App e reposicionamento do Elo como agente de voz |
-| Erick Miguel | 564896 | _pendente: tarefa 1, 7º trecho em `trechos.js` (ver `TAREFAS.md`)_ |
-| Gustavo Duarte | 567066 | _pendente: tarefa 2, novo comando de voz em `interacoes.js` (ver `TAREFAS.md`)_ |
-| Leonardo Pereira | 567836 | _pendente: tarefa 3, 4º velocímetro em `resumoDashboard.js` (ver `TAREFAS.md`)_ |
-| Sarah Marangoni | 566764 | Paleta centralizada em `src/utils/cores.js`, usada nos gráficos (`GraficoBarras`, `GraficoGauge`, `GraficoPizza`, `PainelGraficos`), e princípio Cuidar da Natureza ligado ao Elo em `comoFunciona.js` |
+## Acessibilidade
+
+- Marca em `<h1>`, um `<h2>` por tela e "Pular para o conteúdo".
+- O menu usa `aria-current`, e o foco vai para o conteúdo ao trocar de tela.
+- Formulários usam `<label>`, `aria-invalid` e mensagens de erro ligadas por `aria-describedby`.
+- O Selo tem texto, não só cor.
+- Gráficos têm `role="img"` com os números em texto.
+- O layout funciona no celular (375 px).
+
+## Integrantes e divisão de tarefas
+
+| Integrante | RM | Sprint 1 (commits no histórico) | Sprint 2 |
+|---|---|---|---|
+| Claudio Alves | 568565 | Base do projeto, pesquisa sobre a Motiva, README e reposicionamento do Elo como agente de voz | Organização, README e Git; agente de voz integrado às ocorrências (`nlu/`, `hooks/`, Falar com o Elo, Encaminhamentos) e telas Início e Dashboard lendo o estado |
+| Erick Miguel | 564896 | Trecho de Coxim em `trechos.js` | Estado e persistência (`App.jsx`, `utils/persistencia.js`, `data/exemplo.js`) |
+| Gustavo Duarte | 567066 | Comando de voz sobre neblina em `interacoes.js` | Formulários e telas (`FormTrecho`, `FormOcorrencia`, `Trechos`, `Ocorrencias`, `utils/validacao.js`) |
+| Leonardo Pereira | 567836 | Velocímetro de registros por voz | Lista, filtro e painel (`ListaTrechos`, `ListaOcorrencias`, `CardOcorrencia`, `FiltroOcorrencias`, `PainelTrecho`, `utils/analisarTrecho.js`, `utils/ocorrencias.js`) |
+| Sarah Marangoni | 566764 | Paleta em `utils/cores.js` e princípio Cuidar da Natureza | `Selo`, vocabulário (`data/dominio.js`), estilos e gráficos, indicadores calculados (`utils/indicadores.js`) |
 
 ## Fontes
 

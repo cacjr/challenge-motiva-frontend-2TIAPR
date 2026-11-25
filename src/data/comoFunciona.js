@@ -1,5 +1,5 @@
-// Textos da tela Como funciona. Descrevem a solução proposta;
-// nada aqui está implementado na Sprint 1. Quem importa este arquivo é o App.
+// Textos da tela Como funciona: a solução completa. A introdução da tela diz o
+// que já funciona no front e o que ainda é simulado. Quem importa é o App.
 
 // O Elo é um agente de voz. Estes são os comandos que ele entende.
 export const comandosVoz = [

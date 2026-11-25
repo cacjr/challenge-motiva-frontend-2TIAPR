@@ -5,6 +5,20 @@ export function formatarData(iso) {
   })
 }
 
+export function formatarHora(iso) {
+  return new Date(iso).toTimeString().slice(0, 5)
+}
+
+// Data e hora locais no formato 2026-11-25T14:32:00. Todas as datas da
+// plataforma usam este formato, então dá para ordenar comparando o texto.
+export function isoLocal(data = new Date()) {
+  const dois = (n) => String(n).padStart(2, '0')
+  return `${data.getFullYear()}-${dois(data.getMonth() + 1)}-${dois(data.getDate())}`
+    + `T${dois(data.getHours())}:${dois(data.getMinutes())}:${dois(data.getSeconds())}`
+}
+
+export const formatarKm = (km) => String(km).replace('.', ',')
+
 export function somar(valores) {
   let total = 0
   for (const valor of valores) {
@@ -26,8 +40,3 @@ export function descreverSerie(labels, valores, unidade = '') {
     .map((label, indice) => `${label}: ${valores[indice]}${unidade}`)
     .join('; ')
 }
-
-// TODO Sprint 2: criar src/utils/analisarTrecho.js, nos moldes do
-// analisarPerfil que fizemos no CardioIA. A função recebe as ocorrências do
-// trecho atual e devolve total, quantas são de gravidade alta, o tipo mais
-// frequente, o silêncio médio e se cabe um alerta.
