@@ -1,4 +1,4 @@
-Desafio Motiva - Sprint 2 - 2TIAPR
+Motiva - Sprint 2 - 2TIAPR
 Projeto: Elo - o agente de voz para que nenhuma ocorrência fique em silêncio
 
 Integrantes (Nome - RM):
@@ -12,4 +12,4 @@ Link do repositório (branch main, o mesmo da Sprint 1):
 https://github.com/cacjr/challenge-motiva-frontend-2TIAPR
 
 Link do vídeo no YouTube (não listado):
-COLAR AQUI O LINK DO VÍDEO
+https://youtu.be/FIT99Ao3kXM
