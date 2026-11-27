@@ -2445,3 +2445,8 @@ a:focus-visible,
     max-width: 100%;
   }
 }
+
+.selo-simbolo {
+  font-size: 0.7em;
+  line-height: 1;
+}
