@@ -18,7 +18,7 @@ import {
   planoB,
   principios,
 } from './data/comoFunciona.js'
-import { estadoExemplo, estadoVazio, lerEstado, salvarEstado } from './utils/persistencia.js'
+import { CHAVE, estadoExemplo, estadoVazio, lerEstado, salvarEstado } from './utils/persistencia.js'
 import { criarOcorrencia, gerarId, mudarStatus } from './utils/ocorrencias.js'
 import { mudarEncaminhamento, pendentesDeEncaminhar } from './utils/encaminhamento.js'
 import { calcularResumo } from './utils/indicadores.js'
@@ -113,6 +113,16 @@ export default function App() {
   const comecarDoZero = () => {
     if (window.confirm('Apagar todos os trechos e ocorrências salvos neste navegador? Não dá para desfazer.')) carregar(estadoVazio())
   }
+
+  // Duas abas abertas ficam iguais: quando uma grava no localStorage,
+  // a outra recebe o evento "storage" e recarrega o estado salvo.
+  useEffect(() => {
+    const aoMudarEmOutraAba = (evento) => {
+      if (evento.key === CHAVE && evento.newValue) carregar(lerEstado())
+    }
+    window.addEventListener('storage', aoMudarEmOutraAba)
+    return () => window.removeEventListener('storage', aoMudarEmOutraAba)
+  }, [])
 
   return (
     <Layout
