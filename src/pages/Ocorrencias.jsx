@@ -1,3 +1,4 @@
+// Autor: Gustavo Duarte (GustavoduarteAI) · formulários de trecho e ocorrência e telas Trechos e Ocorrências
 import { useState } from 'react'
 import PainelTrecho from '../components/PainelTrecho.jsx'
 import FormOcorrencia from '../components/FormOcorrencia.jsx'

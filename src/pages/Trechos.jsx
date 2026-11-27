@@ -1,3 +1,4 @@
+// Autor: Gustavo Duarte (GustavoduarteAI) · formulários de trecho e ocorrência e telas Trechos e Ocorrências
 import FormTrecho from '../components/FormTrecho.jsx'
 import ListaTrechos from '../components/ListaTrechos.jsx'
 

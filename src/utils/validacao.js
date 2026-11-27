@@ -1,3 +1,4 @@
+// Autor: Gustavo Duarte (GustavoduarteAI) · formulários de trecho e ocorrência e telas Trechos e Ocorrências
 // Validação dos formulários. Devolvem { campo: mensagem }; vazio = tudo certo.
 
 // Trechos da mesma rodovia não podem se sobrepor: o Elo descobre o trecho

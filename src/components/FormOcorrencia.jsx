@@ -1,3 +1,4 @@
+// Autor: Gustavo Duarte (GustavoduarteAI) · formulários de trecho e ocorrência e telas Trechos e Ocorrências
 import { useState } from 'react'
 import { GRAVIDADES, TIPOS, tipoPorId } from '../data/dominio.js'
 import { isoLocal } from '../utils/formatar.js'
