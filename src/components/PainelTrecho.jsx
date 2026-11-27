@@ -1,5 +1,6 @@
 import Icone from './Icone.jsx'
 import { LIMITE_ALERTA } from '../utils/analisarTrecho.js'
+import { formatarData } from '../utils/formatar.js'
 
 // Só desenha. O cálculo vem pronto de analisarTrecho (src/utils/), pelo pai.
 export default function PainelTrecho({ trecho, resumo }) {
@@ -40,6 +41,7 @@ export default function PainelTrecho({ trecho, resumo }) {
       </dl>
       <p className="painel-regra">
         Alerta quando {LIMITE_ALERTA} ou mais ocorrências de gravidade alta ainda não foram resolvidas.
+        {resumo.ultimaEm && ` Última ocorrência registrada em ${formatarData(resumo.ultimaEm)}.`}
       </p>
     </section>
   )

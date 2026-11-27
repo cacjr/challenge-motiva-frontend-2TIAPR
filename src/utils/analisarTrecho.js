@@ -29,5 +29,10 @@ export function analisarTrecho(ocorrencias) {
     ? `${gravesAbertas} ocorrências graves ainda sem solução neste trecho. Priorize o atendimento.`
     : null
 
-  return { total, graves, gravesAbertas, abertas, tipoFrequente, tiposContagem: contagem, silencioMedio, alerta, mensagemAlerta }
-}
+  // Data da ocorrência registrada mais recentemente (ou null).
+  const ultimaEm = total === 0
+    ? null
+    : ocorrencias.reduce((maior, o) => (o.registradoEm > maior ? o.registradoEm : maior), ocorrencias[0].registradoEm)
+
+  return { ultimaEm, total, graves, gravesAbertas, abertas, tipoFrequente, tiposContagem: contagem, silencioMedio, alerta, mensagemAlerta }
+  }
